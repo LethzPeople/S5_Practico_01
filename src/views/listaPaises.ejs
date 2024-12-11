@@ -1,0 +1,59 @@
+<div class="container mx-auto mt-6">
+  <h1 class="text-3xl font-bold mb-4 text-white">Lista de Países</h1>
+  <% if (messages.length > 0) { %> <!-- Cambia esto -->
+      <div class="bg-green-500 text-white p-4 mb-4 flex justify-between items-center">
+          <span><%= messages %></span>
+          <button onclick="this.parentElement.style.display='none'" class="text-white font-bold ml-4">x</button>
+      </div>
+  <% } %>
+  <div class="bg-gray-800 shadow-md rounded-lg p-6 mb-6">
+      <table class="min-w-full bg-gray-900 text-white">
+          <thead>
+              <tr class="bg-gray-700 text-gray-200">
+                  <th class="py-2 px-4 border-b border-l border-gray-600">Nombre Oficial en Español</th>
+                  <th class="py-2 px-4 border-b border-l border-gray-600">Capital</th>
+                  <th class="py-2 px-4 border-b border-l border-gray-600">Fronteras</th>
+                  <th class="py-2 px-4 border-b border-l border-gray-600">Área</th>
+                  <th class="py-2 px-4 border-b border-l border-gray-600">Población</th>
+                  <th class="py-2 px-4 border-b border-l border-gray-600">Zonas Horarias</th>
+                  <th class="py-2 px-4 border-b border-l border-gray-600">Región</th>
+                  <th class="py-2 px-4 border-b border-l border-gray-600">Creador</th>
+                  <th class="py-2 px-4 border-b border-l border-gray-600">Idiomas</th>
+                  <th class="py-2 px-4 border-b border-l border-gray-600 border-r">Acciones</th>
+              </tr>
+          </thead>
+          <tbody>
+              <% paises.forEach(function(pais) { %>
+                  <tr class="hover:bg-gray-700 border-b border-gray-600">
+                      <td class="py-2 px-4 border-l border-r border-gray-600">
+                          <%= pais.name.nativeName && pais.name.nativeName.spa ? pais.name.nativeName.spa.official : 'No disponible' %>
+                      </td>
+                      <td class="py-2 px-4 border-l border-r border-gray-600"><%= pais.capital.join(', ') %></td>
+                      <td class="py-2 px-4 border-l border-r border-gray-600">
+                      <%= pais.borders && pais.borders.length > 0 ? pais.borders.join(', ') : 'No tiene fronteras' %>
+                      </td>
+                      <td class="py-2 px-4 border-l border-r border-gray-600"><%= pais.area %> km²</td>
+                      <td class="py-2 px-4 border-l border-r border-gray-600"><%= pais.population %></td>
+                      <td class="py-2 px-4 border-l border-r border-gray-600">
+                          <%= pais.timezones ? pais.timezones.join(', ') : 'No disponible' %>
+                      </td>
+                      <td class="py-2 px-4 border-l border-r border-gray-600"><%= pais.region %></td>
+                      <td class="py-2 px-4 border-l border-r border-gray-600"><%= pais.creador %></td>
+                      <td class="py-2 px-4 border-l border-r border-gray-600">
+                          <%= pais.languages ? Object.keys(pais.languages).map(lang => lang.toUpperCase()).join(', ') : 'No disponible' %>
+                      </td>
+                      <td class="py-2 px-4 border-l border-r border-gray-600">
+                          <a href="/editPais/<%= pais._id %>" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded mb-2">Editar</a>
+                          <form action="/pais/<%= pais._id %>?_method=DELETE" method="POST" style="display:inline;">
+                            <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded" onclick="return confirm('¿Estás seguro de que deseas eliminar este país?');">Borrar</button>
+                          </form>
+                      </td>
+                  </tr>
+              <% }); %>
+          </tbody>
+      </table>
+      <div class="mt-4">
+        <a href="/addPais" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Agregar Países</a>
+      </div>
+  </div>
+</div>

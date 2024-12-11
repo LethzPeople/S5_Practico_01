@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de País</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.15/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-900 text-white">
+    <div class="container mx-auto p-4">
+        <h1 class="text-2xl mb-4">Agregar País</h1>
+        <% if (errores && errores.length > 0) { %>
+          <div class="errores mb-4">
+              <ul>
+                  <% errores.forEach(error => { %>
+                      <li class="text-red-500"><%= error %></li>
+                  <% }); %>
+              </ul>
+          </div>
+        <% } %>
+        <form id="paisForm" action="/pais" method="POST">
+            <div class="mb-4">
+                <label for="official" class="block">Nombre Oficial:</label>
+                <input type="text" id="official" name="name[nativeName][spa][official]" class="mt-1 p-2 w-full text-black" required>
+            </div>
+            <div class="mb-4">
+                <label for="capital" class="block">Capital:</label>
+                <input type="text" id="capital" name="capital[]" class="mt-1 p-2 w-full text-black" required>
+            </div>
+            <div class="mb-4">
+              <label for="borders" class="block">Fronteras (separadas por comas):</label>
+              <input type="text" id="borders" name="borders" class="mt-1 p-2 w-full text-black" placeholder="Ej: BLZ, GTM, USA">
+            </div>
+            <div class="mb-4">
+                <label for="area" class="block">Área:</label>
+                <input type="number" id="area" name="area" class="mt-1 p-2 w-full text-black" required>
+            </div>
+            <div class="mb-4">
+                <label for="population" class="block">Población:</label>
+                <input type="number" id="population" name="population" class="mt-1 p-2 w-full text-black" required>
+            </div>
+            <div class="mb-4">
+                <label for="timezone" class="block">Zonas Horarias (formato: UTC-08:00):</label>
+                <input type="text" id="timezone" name="timezones[]" class="mt-1 p-2 w-full text-black" placeholder="Ej: UTC-08:00, UTC-07:00">
+            </div>
+            <div class="mb-4">
+                <label for="region" class="block">Región:</label>
+                <input type="text" id="region" name="region" class="mt-1 p-2 w-full text-black" required>
+            </div>
+            <div class="mb-4">
+              <label for="languages" class="block">Idiomas (separados por comas, ej: SPA, ENG):</label>
+              <input type="text" id="languages" name="languages" class="mt-1 p-2 w-full text-black" placeholder="Ej: SPA, ENG">
+          </div>
+            <button type="submit" class="bg-blue-500 text-white p-2">Enviar</button>
+        </form>
+    </div>
+</body>
+</html>
