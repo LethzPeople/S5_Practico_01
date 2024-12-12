@@ -1,40 +1,47 @@
-// import fetch from 'node-fetch'; // Importa node-fetch
+import fetch from 'node-fetch'; // Importa node-fetch
 import { connectDB } from '../config/dbConfig.mjs'; // Importa la función connectDB como exportación nombrada
 import Pais from '../models/pais.mjs'; // Importa el modelo de País
 import { validarPais } from '../validators/paisValidator.mjs'; // Importa la función de validación
 
-/* Controlador para consumir la API y escribir la base de datos
-export const obtenerTodosLosPaisesController = async (req, res) => {
-    try {
-        await connectDB(); // Conectar a la base de datos
+// Controlador para consumir la API y escribir la base de datos
+export const obtenerTodosLosPaisesController = async () => {
+  try {
+    await connectDB(); // Conectar a la base de datos
 
-        const response = await fetch('https://restcountries.com/v3.1/all');
-        if (!response.ok) {
-            return res.status(response.status).json({ error: 'Error al obtener los países' });
-        }
-        const paises = await response.json();
-
-        // Filtrar los países que tienen "spa" en su propiedad "languages"
-        const paisesFiltrados = paises.filter(pais => pais.languages && pais.languages.spa);
-
-        // Mapear los países filtrados para eliminar propiedades no deseadas
-        const paisesModificados = paisesFiltrados.map(pais => {
-            const { translations, tld, cca2, ccn3, cca3, c1oc, idd, altSpellings, car, coatOfArms, postalCode, demonyms, ...resto } = pais;
-            return {
-                ...resto,
-                // No es necesario agregar "creador" aquí, ya que se establece por defecto en el modelo
-            };
-        });
-
-        // Almacenar los países en la base de datos
-        await Pais.insertMany(paisesModificados);
-
-        return res.json(paisesModificados); // Devuelve la lista de países modificados como respuesta
-    } catch (error) {
-        console.error('Error:', error);
-        return res.status(500).json({ error: 'Error interno del servidor' });
+    // Verificar si ya existen países en la base de datos
+    const paises = await Pais.find();
+    if (paises.length > 0) {
+      console.log('Ya existen países en la base de datos. No se ejecutará la operación.');
+      return;
     }
-};*/
+
+    const response = await fetch('https://restcountries.com/v3.1/all');
+    if (!response.ok) {
+      throw new Error('Error al obtener los países');
+    }
+    const paisesApi = await response.json();
+
+    // Filtrar los países que tienen "spa" en su propiedad "languages"
+    const paisesFiltrados = paisesApi.filter(pais => pais.languages && pais.languages.spa);
+
+    // Mapear los países filtrados para eliminar propiedades no deseadas y agregar el campo "creador"
+    const paisesModificados = paisesFiltrados.map(pais => {
+      const { translations, tld, cca2, ccn3, cca3, c1oc, idd, altSpellings, car, coatOfArms, postalCode, demonyms, ...resto } = pais;
+      return {
+        ...resto,
+        creador: 'Matias' 
+      };
+    });
+
+    // Almacenar los países en la base de datos
+    await Pais.insertMany(paisesModificados);
+
+    console.log('Países almacenados en la base de datos');
+  } catch (error) {
+    console.error('Error:', error);
+  }
+};
+
 
 // Obtener País por ID
 export const obtenerPaisPorId = async (id) => {

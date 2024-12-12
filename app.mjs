@@ -6,6 +6,7 @@ import { fileURLToPath } from 'url';
 import expressLayouts from 'express-ejs-layouts';
 import methodOverride from 'method-override';
 import { obtenerPaisesDesdeDBController, agregarPaisController,editarPaisController,actualizarPaisController,eliminarPaisController } from './src/controllers/paisController.mjs';
+import { obtenerTodosLosPaisesController } from './src/controllers/paisController.mjs'; // Importa el controlador
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -29,6 +30,13 @@ app.set('views', path.join(__dirname, 'src', 'views'));
 
 // Usa el middleware de layouts
 app.use(expressLayouts);
+
+// Llama al controlador para obtener todos los países
+obtenerTodosLosPaisesController().then(() => {
+  console.log('Operación completa');
+}).catch((error) => {
+  console.error('Error:', error);
+});
 
 // Configura el middleware de sesión
 app.use(session({
