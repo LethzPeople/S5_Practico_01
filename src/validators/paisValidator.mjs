@@ -36,7 +36,7 @@ export const validarPoblacion = (poblacion) => {
 };
 
 export const validarIdiomas = (idiomas) => {
-  const idiomasValidos = ['SPA', 'ENG', 'FRA', 'DEU']; // Lista de idiomas válidos
+  const idiomasValidos = ['SPA', 'ENG', 'FRA', 'DEU', 'AYM', 'QUE', 'GRN', 'CAT', 'EUS', 'GLC', 'BER', 'MEY', 'POR', 'BJZ', 'CHA']; // Lista de idiomas válidos
   for (const idioma of idiomas) {
       if (!idiomasValidos.includes(idioma)) {
           return `El idioma ${idioma} no es válido.`;
