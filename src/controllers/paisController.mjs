@@ -43,6 +43,7 @@ export const obtenerTodosLosPaisesController = async () => {
 };
 
 
+
 // Obtener País por ID
 export const obtenerPaisPorId = async (id) => {
   try {
@@ -59,7 +60,7 @@ export const obtenerPaisPorId = async (id) => {
 export const obtenerPaisesDesdeDBController = async (req, res) => {
   try {
       await connectDB(); 
-      const paises = await Pais.find({ region: { $exists: true } });
+      const paises = await Pais.find({ creador: 'Matias' }); // Filtra por creador
 
       // Pasa el mensaje flash a la vista
       return res.render('listaPaises', { 
@@ -94,7 +95,7 @@ export const agregarPaisController = async (req, res) => {
           timezones 
       } = req.body;
 
-      // Accede al nombre oficial correctamente
+      // Accede al nombre 
       const nombreOficial = name.nativeName?.spa?.official;
 
       // Validaciones
@@ -119,11 +120,11 @@ export const agregarPaisController = async (req, res) => {
       // Crea un nuevo país
       const nuevoPais = new Pais({
           name: {
-              common: name.common || '', // Asegúrate de que esto esté bien definido
-              official: nombreOficial || '', // Asegúrate de que esto esté bien definido
+              common: name.common || '', 
+              official: nombreOficial || '', 
               nativeName: {
                   spa: {
-                      official: nombreOficial || '' // Asegúrate de que esto esté bien estructurado
+                      official: nombreOficial || '' 
                   }
               }
           },
@@ -153,7 +154,7 @@ export const agregarPaisController = async (req, res) => {
   }
 };
 
-// Ruta para editar un país
+// Muestra el formulario de edicion
 export const editarPaisController = async (req, res) => {
   const paisId = req.params.id;
   try {
@@ -200,17 +201,17 @@ export const actualizarPaisController = async (req, res) => {
       // Actualiza el país en la base de datos
       await Pais.findByIdAndUpdate(paisId, {
           name: {
-              common: name.common, // Asegúrate de que el formulario envíe estos campos
+              common: name.common, 
               official: name.official,
-              nativeName: name.nativeName // Asegúrate de que esto sea un objeto
+              nativeName: name.nativeName 
           },
-          capital: Array.isArray(capital) ? capital : [capital], // Asegúrate de que capital sea un array
-          borders: bordersArray, // Usa el nuevo valor de borders
-          area: Number(area), // Asegúrate de que el área sea un número
-          population: parseInt(population, 10), // Asegúrate de que la población sea un número entero
-          timezones: Array.isArray(timezones) ? timezones : timezones.split(',').map(t => t.trim()), // Asegúrate de que timezones sea un array
+          capital: Array.isArray(capital) ? capital : [capital], 
+          borders: bordersArray, 
+          area: Number(area), 
+          population: parseInt(population, 10), 
+          timezones: Array.isArray(timezones) ? timezones : timezones.split(',').map(t => t.trim()), 
           region,
-          languages: idiomasObject // Guarda los idiomas como objeto
+          languages: idiomasObject 
       });
 
       req.flash('success_msg', 'País actualizado correctamente');
